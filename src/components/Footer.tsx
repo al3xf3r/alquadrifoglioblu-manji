@@ -58,7 +58,7 @@ export default function Footer({ lang }: FooterProps) {
               marginTop: 6,
             }}
           >
-            {lang === "it" ? "Ristorante · Pizzeria · Pub" : "Restaurant · Pizzeria · Pub"}
+            {lang === "it" ? "Ristorante · Pizzeria" : "Restaurant · Pizzeria"}
           </p>
         </div>
 

@@ -3,10 +3,10 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Al Quadrifoglio Blu | Ristorante Pizzeria",
-  description: "Ristorante Pizzeria Pub a Francavilla di Sicilia. Scopri il nostro menu con pizze tradizionali, piatti siciliani e molto altro.",
+  description: "Ristorante Pizzeria a Francavilla di Sicilia. Scopri il nostro menu con pizze tradizionali, piatti siciliani e molto altro.",
   openGraph: {
     title: "Al Quadrifoglio Blu",
-    description: "Ristorante Pizzeria Pub a Francavilla di Sicilia (ME)",
+    description: "Ristorante Pizzeria a Francavilla di Sicilia (ME)",
     images: ["/og-quadrifoglio.jpg"],
   },
 };

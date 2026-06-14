@@ -34,7 +34,7 @@ export default function HomeView({ lang, onSelectCategory }: HomeViewProps) {
             fontWeight: 400,
           }}
         >
-          Ristorante · Pizzeria · Pub
+          Ristorante · Pizzeria
         </p>
       </div>
 

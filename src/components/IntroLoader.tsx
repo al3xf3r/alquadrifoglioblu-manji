@@ -229,7 +229,7 @@ export default function IntroLoader({ onDone }: { onDone: () => void }) {
               opacity: phase === "pre" || phase === "enter" ? 0 : undefined,
             }}
           >
-            Ristorante · Pizzeria · Pub
+            Ristorante · Pizzeria
           </p>
         </div>
       </div>
