@@ -11,7 +11,6 @@ interface HomeViewProps {
 export default function HomeView({ lang, onSelectCategory }: HomeViewProps) {
   return (
     <div style={{ maxWidth: 480, margin: "0 auto", padding: "20px 16px 100px" }}>
-      {/* Header intro */}
       <div style={{ textAlign: "center", marginBottom: 28 }}>
         <h1
           style={{
@@ -39,7 +38,6 @@ export default function HomeView({ lang, onSelectCategory }: HomeViewProps) {
         </p>
       </div>
 
-      {/* Grid 2x2 */}
       <div
         style={{
           display: "grid",
@@ -58,24 +56,29 @@ export default function HomeView({ lang, onSelectCategory }: HomeViewProps) {
               aspectRatio: "1 / 1",
               border: "none",
               cursor: "pointer",
-              background: "#082B4F",
+              background: "#C8DCEF",
               padding: 0,
             }}
           >
+            {/* FadeImage gestisce internamente absolute inset */}
             <FadeImage
               src={cat.image}
               alt={lang === "it" ? cat.nameIT : cat.nameEN}
-              className="absolute inset-0 w-full h-full object-cover"
+              placeholderColor="#C8DCEF"
             />
+
             {/* Overlay gradiente dal basso */}
             <div
               style={{
                 position: "absolute",
                 inset: 0,
-                background: "linear-gradient(to top, rgba(8,43,79,0.75) 0%, rgba(8,43,79,0.35) 55%, transparent 100%)",
+                background:
+                  "linear-gradient(to top, rgba(8,43,79,0.78) 0%, rgba(8,43,79,0.35) 55%, transparent 100%)",
+                pointerEvents: "none",
               }}
             />
-            {/* Testo centrato */}
+
+            {/* Testo */}
             <div
               style={{
                 position: "absolute",

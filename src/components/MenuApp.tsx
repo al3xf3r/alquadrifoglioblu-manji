@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { Lang, MENU_CATEGORIES } from "@/data/menu";
 import IntroLoader from "./IntroLoader";
 import TopBar from "./TopBar";
@@ -10,9 +10,12 @@ import SearchOverlay from "./SearchOverlay";
 import Footer from "./Footer";
 
 export default function MenuApp() {
+  const [ready, setReady] = useState(false);
   const [lang, setLang] = useState<Lang>("it");
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
+
+  const handleLoaderDone = useCallback(() => setReady(true), []);
 
   const activeCat = activeCategory
     ? (lang === "it"
@@ -22,37 +25,41 @@ export default function MenuApp() {
 
   return (
     <>
-      <IntroLoader />
+      {/* Loader blocca il menu finché non ha finito */}
+      {!ready && <IntroLoader onDone={handleLoaderDone} />}
 
-      {searchOpen && (
-        <SearchOverlay
-          lang={lang}
-          onClose={() => setSearchOpen(false)}
-          onSelectCategory={(slug) => {
-            setActiveCategory(slug);
-            setSearchOpen(false);
-          }}
-        />
-      )}
+      {/* Menu visibile ma nascosto durante il loader per precaricare le font */}
+      <div style={{ visibility: ready ? "visible" : "hidden" }}>
+        {searchOpen && (
+          <SearchOverlay
+            lang={lang}
+            onClose={() => setSearchOpen(false)}
+            onSelectCategory={(slug) => {
+              setActiveCategory(slug);
+              setSearchOpen(false);
+            }}
+          />
+        )}
 
-      <div style={{ minHeight: "100dvh", display: "flex", flexDirection: "column" }}>
-        <TopBar
-          lang={lang}
-          onLangToggle={() => setLang(lang === "it" ? "en" : "it")}
-          onBack={activeCategory ? () => setActiveCategory(null) : undefined}
-          onSearchOpen={() => setSearchOpen(true)}
-          title={activeCat}
-        />
+        <div style={{ minHeight: "100dvh", display: "flex", flexDirection: "column" }}>
+          <TopBar
+            lang={lang}
+            onLangToggle={() => setLang(lang === "it" ? "en" : "it")}
+            onBack={activeCategory ? () => setActiveCategory(null) : undefined}
+            onSearchOpen={() => setSearchOpen(true)}
+            title={activeCat}
+          />
 
-        <main style={{ flex: 1 }}>
-          {activeCategory ? (
-            <CategoryView slug={activeCategory} lang={lang} />
-          ) : (
-            <HomeView lang={lang} onSelectCategory={setActiveCategory} />
-          )}
-        </main>
+          <main style={{ flex: 1 }}>
+            {activeCategory ? (
+              <CategoryView slug={activeCategory} lang={lang} />
+            ) : (
+              <HomeView lang={lang} onSelectCategory={setActiveCategory} />
+            )}
+          </main>
 
-        <Footer lang={lang} />
+          <Footer lang={lang} />
+        </div>
       </div>
     </>
   );
