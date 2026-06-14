@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useCallback } from "react";
-import { Lang, MENU_CATEGORIES } from "@/data/menu";
+import { useState, useEffect } from "react";
+import { Lang, MENU_CATEGORIES, MenuCategory } from "@/data/menu";
 import IntroLoader from "./IntroLoader";
 import TopBar from "./TopBar";
 import HomeView from "./HomeView";
@@ -9,33 +9,76 @@ import CategoryView from "./CategoryView";
 import SearchOverlay from "./SearchOverlay";
 import Footer from "./Footer";
 
+const SESSION_KEY = "qb_intro_seen";
+
 export default function MenuApp() {
-  const [ready, setReady] = useState(false);
   const [lang, setLang] = useState<Lang>("it");
-  const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [activeCat, setActiveCat] = useState<MenuCategory | null>(null);
+  // null = non ancora controllato, true = mostra intro, false = salta
+  const [showIntro, setShowIntro] = useState<boolean | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
 
-  const handleLoaderDone = useCallback(() => setReady(true), []);
+  // Controlla sessionStorage lato client
+  useEffect(() => {
+    const seen = sessionStorage.getItem(SESSION_KEY);
+    setShowIntro(seen ? false : true);
+  }, []);
 
-  const activeCat = activeCategory
-    ? (lang === "it"
-        ? MENU_CATEGORIES.find((c) => c.slug === activeCategory)?.nameIT
-        : MENU_CATEGORIES.find((c) => c.slug === activeCategory)?.nameEN)
+  const handleIntroComplete = () => {
+    sessionStorage.setItem(SESSION_KEY, "1");
+    setShowIntro(false);
+  };
+
+  // Back gesture del browser
+  useEffect(() => {
+    const onPop = () => {
+      if (activeCat) setActiveCat(null);
+    };
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, [activeCat]);
+
+  const openCategory = (slug: string) => {
+    const cat = MENU_CATEGORIES.find((c) => c.slug === slug) ?? null;
+    if (!cat) return;
+    window.history.pushState({ slug }, "");
+    setActiveCat(cat);
+    window.scrollTo(0, 0);
+  };
+
+  const goHome = () => {
+    setActiveCat(null);
+    window.scrollTo(0, 0);
+  };
+
+  const activeCatName = activeCat
+    ? (lang === "it" ? activeCat.nameIT : activeCat.nameEN)
     : undefined;
 
   return (
     <>
-      {/* Loader sovrapposto — il menu sotto rimane sempre montato */}
-      {!ready && <IntroLoader onDone={handleLoaderDone} />}
+      {showIntro === true && (
+        <IntroLoader onDone={handleIntroComplete} />
+      )}
 
-      <div style={{ minHeight: "100dvh", display: "flex", flexDirection: "column" }}>
+      {/* Menu sempre nel DOM — opacity 0 durante intro per non flashare */}
+      <div
+        style={{
+          opacity: showIntro === false ? 1 : 0,
+          transition: showIntro === false ? "opacity 0.4s ease" : "none",
+          pointerEvents: showIntro === false ? "auto" : "none",
+          minHeight: "100dvh",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
         {searchOpen && (
           <SearchOverlay
             lang={lang}
             onClose={() => setSearchOpen(false)}
             onSelectCategory={(slug) => {
-              setActiveCategory(slug);
               setSearchOpen(false);
+              openCategory(slug);
             }}
           />
         )}
@@ -43,16 +86,16 @@ export default function MenuApp() {
         <TopBar
           lang={lang}
           onLangToggle={() => setLang(lang === "it" ? "en" : "it")}
-          onBack={activeCategory ? () => setActiveCategory(null) : undefined}
+          onBack={activeCat ? goHome : undefined}
           onSearchOpen={() => setSearchOpen(true)}
-          title={activeCat}
+          title={activeCatName}
         />
 
         <main style={{ flex: 1 }}>
-          {activeCategory ? (
-            <CategoryView slug={activeCategory} lang={lang} />
+          {activeCat ? (
+            <CategoryView slug={activeCat.slug} lang={lang} />
           ) : (
-            <HomeView lang={lang} onSelectCategory={setActiveCategory} />
+            <HomeView lang={lang} onSelectCategory={openCategory} />
           )}
         </main>
 
