@@ -25,11 +25,10 @@ export default function MenuApp() {
 
   return (
     <>
-      {/* Loader blocca il menu finché non ha finito */}
+      {/* Loader sovrapposto — il menu sotto rimane sempre montato */}
       {!ready && <IntroLoader onDone={handleLoaderDone} />}
 
-      {/* Menu visibile ma nascosto durante il loader per precaricare le font */}
-      <div style={{ visibility: ready ? "visible" : "hidden" }}>
+      <div style={{ minHeight: "100dvh", display: "flex", flexDirection: "column" }}>
         {searchOpen && (
           <SearchOverlay
             lang={lang}
@@ -41,25 +40,23 @@ export default function MenuApp() {
           />
         )}
 
-        <div style={{ minHeight: "100dvh", display: "flex", flexDirection: "column" }}>
-          <TopBar
-            lang={lang}
-            onLangToggle={() => setLang(lang === "it" ? "en" : "it")}
-            onBack={activeCategory ? () => setActiveCategory(null) : undefined}
-            onSearchOpen={() => setSearchOpen(true)}
-            title={activeCat}
-          />
+        <TopBar
+          lang={lang}
+          onLangToggle={() => setLang(lang === "it" ? "en" : "it")}
+          onBack={activeCategory ? () => setActiveCategory(null) : undefined}
+          onSearchOpen={() => setSearchOpen(true)}
+          title={activeCat}
+        />
 
-          <main style={{ flex: 1 }}>
-            {activeCategory ? (
-              <CategoryView slug={activeCategory} lang={lang} />
-            ) : (
-              <HomeView lang={lang} onSelectCategory={setActiveCategory} />
-            )}
-          </main>
+        <main style={{ flex: 1 }}>
+          {activeCategory ? (
+            <CategoryView slug={activeCategory} lang={lang} />
+          ) : (
+            <HomeView lang={lang} onSelectCategory={setActiveCategory} />
+          )}
+        </main>
 
-          <Footer lang={lang} />
-        </div>
+        <Footer lang={lang} />
       </div>
     </>
   );

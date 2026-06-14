@@ -11,6 +11,17 @@ export const metadata: Metadata = {
   },
 };
 
+const CATEGORY_IMAGES = [
+  "/pizze.webp",
+  "/bianche.webp",
+  "/speciali.webp",
+  "/pan.webp",
+  "/insalata.webp",
+  "/antip.webp",
+  "/piatti.webp",
+  "/bevande.webp",
+];
+
 export default function RootLayout({
   children,
 }: {
@@ -25,6 +36,10 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600&display=swap"
           rel="stylesheet"
         />
+        {/* Preload immagini categorie — partono prima di React */}
+        {CATEGORY_IMAGES.map((src) => (
+          <link key={src} rel="preload" as="image" href={src} />
+        ))}
       </head>
       <body>{children}</body>
     </html>
