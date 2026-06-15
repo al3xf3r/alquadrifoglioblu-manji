@@ -72,7 +72,7 @@ export default function SearchOverlay({ lang, onClose, onSelectCategory }: Searc
             results.push({
               itemName: name,
               description: desc,
-              price: item.price,
+              price: item.price ?? 0,
               categorySlug: cat.slug,
               categoryName: catName,
             });
