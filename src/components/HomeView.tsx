@@ -14,7 +14,7 @@ export default function HomeView({ lang, onSelectCategory }: HomeViewProps) {
         <h1
           style={{
             fontFamily: "'Cormorant Garamond', serif",
-            fontSize: "2rem",
+            fontSize: "2.4rem",
             fontWeight: 700,
             color: "#082B4F",
             lineHeight: 1.15,
@@ -26,7 +26,7 @@ export default function HomeView({ lang, onSelectCategory }: HomeViewProps) {
         <p
           style={{
             fontFamily: "'Jost', sans-serif",
-            fontSize: "0.82rem",
+            fontSize: "0.98rem",
             color: "#6B7C8F",
             letterSpacing: "0.12em",
             textTransform: "uppercase",
@@ -100,7 +100,7 @@ export default function HomeView({ lang, onSelectCategory }: HomeViewProps) {
               <span
                 style={{
                   fontFamily: "'Cormorant Garamond', serif",
-                  fontSize: "1rem",
+                  fontSize: "1.2rem",
                   fontWeight: 700,
                   color: "#FFFFFF",
                   textShadow: "0 1px 8px rgba(0,0,0,0.55)",
