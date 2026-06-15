@@ -1,7 +1,6 @@
 "use client";
 
 import { MENU_CATEGORIES, Lang } from "@/data/menu";
-import FadeImage from "./FadeImage";
 
 interface HomeViewProps {
   lang: Lang;
@@ -60,11 +59,18 @@ export default function HomeView({ lang, onSelectCategory }: HomeViewProps) {
               padding: 0,
             }}
           >
-            {/* FadeImage gestisce internamente absolute inset */}
-            <FadeImage
+            {/* Immagine diretta senza FadeImage — evita bug onLoad con cache */}
+            <img
               src={cat.image}
               alt={lang === "it" ? cat.nameIT : cat.nameEN}
-              placeholderColor="#C8DCEF"
+              style={{
+                position: "absolute",
+                inset: 0,
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                display: "block",
+              }}
             />
 
             {/* Overlay gradiente dal basso */}
