@@ -6,19 +6,20 @@ import IntroLoader from "./IntroLoader";
 import TopBar from "./TopBar";
 import HomeView from "./HomeView";
 import CategoryView from "./CategoryView";
+import PasticceraView from "./PasticceraView";
 import SearchOverlay from "./SearchOverlay";
 import Footer from "./Footer";
 
 const SESSION_KEY = "qb_intro_seen";
+type View = "home" | "category" | "pasticceria";
 
 export default function MenuApp() {
   const [lang, setLang] = useState<Lang>("it");
+  const [view, setView] = useState<View>("home");
   const [activeCat, setActiveCat] = useState<MenuCategory | null>(null);
-  // null = non ancora controllato, true = mostra intro, false = salta
   const [showIntro, setShowIntro] = useState<boolean | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
 
-  // Controlla sessionStorage lato client
   useEffect(() => {
     const seen = sessionStorage.getItem(SESSION_KEY);
     setShowIntro(seen ? false : true);
@@ -29,39 +30,49 @@ export default function MenuApp() {
     setShowIntro(false);
   };
 
-  // Back gesture del browser
   useEffect(() => {
     const onPop = () => {
-      if (activeCat) setActiveCat(null);
+      if (view !== "home") {
+        setView("home");
+        setActiveCat(null);
+      }
     };
     window.addEventListener("popstate", onPop);
     return () => window.removeEventListener("popstate", onPop);
-  }, [activeCat]);
+  }, [view]);
 
   const openCategory = (slug: string) => {
     const cat = MENU_CATEGORIES.find((c) => c.slug === slug) ?? null;
     if (!cat) return;
     window.history.pushState({ slug }, "");
     setActiveCat(cat);
+    setView("category");
+    window.scrollTo(0, 0);
+  };
+
+  const openPasticceria = () => {
+    window.history.pushState({ view: "pasticceria" }, "");
+    setView("pasticceria");
     window.scrollTo(0, 0);
   };
 
   const goHome = () => {
+    setView("home");
     setActiveCat(null);
     window.scrollTo(0, 0);
   };
 
-  const activeCatName = activeCat
-    ? (lang === "it" ? activeCat.nameIT : activeCat.nameEN)
-    : undefined;
+  const topBarTitle =
+    view === "pasticceria"
+      ? (lang === "it" ? "Pasticceria" : "Pastry")
+      : view === "category" && activeCat
+      ? (lang === "it" ? activeCat.nameIT : activeCat.nameEN)
+      : undefined;
 
   return (
     <>
-      {showIntro === true && (
-        <IntroLoader onDone={handleIntroComplete} />
-      )}
+      {showIntro === true && <IntroLoader onDone={handleIntroComplete} />}
 
-      {/* Menu sempre nel DOM — opacity 0 durante intro per non flashare */}
       <div
         style={{
           opacity: showIntro === false ? 1 : 0,
@@ -86,16 +97,24 @@ export default function MenuApp() {
         <TopBar
           lang={lang}
           onLangToggle={() => setLang(lang === "it" ? "en" : "it")}
-          onBack={activeCat ? goHome : undefined}
+          onBack={view !== "home" ? goHome : undefined}
           onSearchOpen={() => setSearchOpen(true)}
-          title={activeCatName}
+          title={topBarTitle}
         />
 
         <main style={{ flex: 1 }}>
-          {activeCat ? (
+          {view === "home" && (
+            <HomeView
+              lang={lang}
+              onSelectCategory={openCategory}
+              onSelectPasticceria={openPasticceria}
+            />
+          )}
+          {view === "category" && activeCat && (
             <CategoryView slug={activeCat.slug} lang={lang} />
-          ) : (
-            <HomeView lang={lang} onSelectCategory={openCategory} />
+          )}
+          {view === "pasticceria" && (
+            <PasticceraView lang={lang} />
           )}
         </main>
 

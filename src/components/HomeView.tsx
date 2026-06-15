@@ -5,9 +5,10 @@ import { MENU_CATEGORIES, Lang } from "@/data/menu";
 interface HomeViewProps {
   lang: Lang;
   onSelectCategory: (slug: string) => void;
+  onSelectPasticceria: () => void;
 }
 
-export default function HomeView({ lang, onSelectCategory }: HomeViewProps) {
+export default function HomeView({ lang, onSelectCategory, onSelectPasticceria }: HomeViewProps) {
   return (
     <div style={{ maxWidth: 480, margin: "0 auto", padding: "20px 16px 100px" }}>
       <div style={{ textAlign: "center", marginBottom: 28 }}>
@@ -37,13 +38,8 @@ export default function HomeView({ lang, onSelectCategory }: HomeViewProps) {
         </p>
       </div>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: 12,
-        }}
-      >
+      {/* Griglia 2x2 categorie */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
         {MENU_CATEGORIES.map((cat) => (
           <button
             key={cat.slug}
@@ -59,32 +55,19 @@ export default function HomeView({ lang, onSelectCategory }: HomeViewProps) {
               padding: 0,
             }}
           >
-            {/* Immagine diretta senza FadeImage — evita bug onLoad con cache */}
             <img
               src={cat.image}
               alt={lang === "it" ? cat.nameIT : cat.nameEN}
-              style={{
-                position: "absolute",
-                inset: 0,
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-                display: "block",
-              }}
+              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", display: "block" }}
             />
-
-            {/* Overlay gradiente dal basso */}
             <div
               style={{
                 position: "absolute",
                 inset: 0,
-                background:
-                  "linear-gradient(to top, rgba(8,43,79,0.78) 0%, rgba(8,43,79,0.35) 55%, transparent 100%)",
+                background: "linear-gradient(to top, rgba(8,43,79,0.78) 0%, rgba(8,43,79,0.35) 55%, transparent 100%)",
                 pointerEvents: "none",
               }}
             />
-
-            {/* Testo */}
             <div
               style={{
                 position: "absolute",
@@ -113,6 +96,71 @@ export default function HomeView({ lang, onSelectCategory }: HomeViewProps) {
             </div>
           </button>
         ))}
+
+        {/* Card doppia pasticceria — occupa 2 colonne */}
+        <button
+          onClick={onSelectPasticceria}
+          style={{
+            gridColumn: "1 / -1",
+            position: "relative",
+            borderRadius: 16,
+            overflow: "hidden",
+            aspectRatio: "2 / 1",
+            border: "none",
+            cursor: "pointer",
+            background: "#C8DCEF",
+            padding: 0,
+          }}
+        >
+          <img
+            src="/pasticceria.jpg"
+            alt={lang === "it" ? "Pasticceria" : "Pastry"}
+            style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              background: "linear-gradient(to top, rgba(8,43,79,0.82) 0%, rgba(8,43,79,0.4) 50%, transparent 100%)",
+              pointerEvents: "none",
+            }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              bottom: 0,
+              left: 0,
+              right: 0,
+              padding: "18px 20px",
+            }}
+          >
+            <p
+              style={{
+                fontFamily: "'Jost', sans-serif",
+                fontSize: "0.72rem",
+                color: "rgba(255,255,255,0.75)",
+                letterSpacing: "0.2em",
+                textTransform: "uppercase",
+                marginBottom: 4,
+              }}
+            >
+              {lang === "it" ? "Scopri" : "Discover"}
+            </p>
+            <span
+              style={{
+                fontFamily: "'Cormorant Garamond', serif",
+                fontSize: "1.7rem",
+                fontWeight: 700,
+                color: "#FFFFFF",
+                textShadow: "0 2px 12px rgba(0,0,0,0.5)",
+                display: "block",
+                lineHeight: 1.15,
+              }}
+            >
+              {lang === "it" ? "La nostra Pasticceria" : "Our Pastry Shop"}
+            </span>
+          </div>
+        </button>
       </div>
     </div>
   );
