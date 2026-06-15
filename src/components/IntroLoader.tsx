@@ -206,7 +206,7 @@ export default function IntroLoader({ onDone }: { onDone: () => void }) {
           <h1
             style={{
               fontFamily: "'Cormorant Garamond', serif",
-              fontSize: "1.7rem",
+              fontSize: "2.04rem",
               fontWeight: 600,
               color: "#082B4F",
               letterSpacing: "0.04em",
@@ -222,7 +222,7 @@ export default function IntroLoader({ onDone }: { onDone: () => void }) {
               fontFamily: "'Jost', sans-serif",
               color: "#6B7C8F",
               letterSpacing: "0.22em",
-              fontSize: "0.6rem",
+              fontSize: "0.72rem",
               textTransform: "uppercase",
               fontWeight: 400,
               animation: isActive ? "text-rise 0.5s ease 1.05s both" : "none",
