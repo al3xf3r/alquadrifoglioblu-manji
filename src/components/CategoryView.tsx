@@ -25,7 +25,7 @@ function SupplementsBox({ supplements, lang }: { supplements: Supplement[]; lang
       <p
         style={{
           fontFamily: "'Cormorant Garamond', serif",
-          fontSize: "1rem",
+          fontSize: "1.2rem",       // era 1rem
           fontWeight: 700,
           color: "#082B4F",
           marginBottom: 12,
@@ -34,7 +34,7 @@ function SupplementsBox({ supplements, lang }: { supplements: Supplement[]; lang
       >
         {lang === "it" ? "Supplementi" : "Extra Toppings"}
       </p>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "6px 8px" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px 10px" }}>
         {supplements.map((s, i) => (
           <div
             key={i}
@@ -48,7 +48,7 @@ function SupplementsBox({ supplements, lang }: { supplements: Supplement[]; lang
             <span
               style={{
                 fontFamily: "'Jost', sans-serif",
-                fontSize: "0.78rem",
+                fontSize: "0.94rem",   // era 0.78rem
                 color: "#082B4F",
                 fontWeight: 400,
               }}
@@ -58,7 +58,7 @@ function SupplementsBox({ supplements, lang }: { supplements: Supplement[]; lang
             <span
               style={{
                 fontFamily: "'Jost', sans-serif",
-                fontSize: "0.78rem",
+                fontSize: "0.94rem",   // era 0.78rem
                 color: "#0B5CAD",
                 fontWeight: 600,
                 whiteSpace: "nowrap",
@@ -114,7 +114,7 @@ export default function CategoryView({ slug, lang }: CategoryViewProps) {
           <h2
             style={{
               fontFamily: "'Cormorant Garamond', serif",
-              fontSize: "1.6rem",
+              fontSize: "1.9rem",    // era 1.6rem
               fontWeight: 700,
               color: "#FFFFFF",
               textShadow: "0 2px 10px rgba(0,0,0,0.5)",
@@ -133,7 +133,7 @@ export default function CategoryView({ slug, lang }: CategoryViewProps) {
             <h3
               style={{
                 fontFamily: "'Cormorant Garamond', serif",
-                fontSize: "1.2rem",
+                fontSize: "1.45rem",   // era 1.2rem
                 fontWeight: 700,
                 color: "#082B4F",
                 marginBottom: 12,
@@ -157,7 +157,7 @@ export default function CategoryView({ slug, lang }: CategoryViewProps) {
                     justifyContent: "space-between",
                     alignItems: "flex-start",
                     gap: 12,
-                    padding: "12px 0",
+                    padding: "14px 0",  // era 12px
                     borderBottom: "1px solid rgba(8,43,79,0.07)",
                   }}
                 >
@@ -165,11 +165,11 @@ export default function CategoryView({ slug, lang }: CategoryViewProps) {
                     <p
                       style={{
                         fontFamily: "'Cormorant Garamond', serif",
-                        fontSize: "1.05rem",
+                        fontSize: "1.25rem",   // era 1.05rem
                         fontWeight: 600,
                         color: "#082B4F",
                         lineHeight: 1.25,
-                        marginBottom: desc ? 3 : 0,
+                        marginBottom: desc ? 4 : 0,
                       }}
                     >
                       {name}
@@ -178,9 +178,9 @@ export default function CategoryView({ slug, lang }: CategoryViewProps) {
                       <p
                         style={{
                           fontFamily: "'Jost', sans-serif",
-                          fontSize: "0.78rem",
+                          fontSize: "0.92rem",   // era 0.78rem
                           color: "#6B7C8F",
-                          lineHeight: 1.4,
+                          lineHeight: 1.45,
                           fontWeight: 300,
                         }}
                       >
@@ -191,7 +191,7 @@ export default function CategoryView({ slug, lang }: CategoryViewProps) {
                   <span
                     style={{
                       fontFamily: "'Jost', sans-serif",
-                      fontSize: "0.95rem",
+                      fontSize: "1.1rem",    // era 0.95rem
                       fontWeight: 600,
                       color: "#0B5CAD",
                       whiteSpace: "nowrap",
@@ -205,7 +205,6 @@ export default function CategoryView({ slug, lang }: CategoryViewProps) {
             })}
           </div>
 
-          {/* Supplementi sotto il gruppo, se presenti */}
           {group.supplements && group.supplements.length > 0 && (
             <SupplementsBox supplements={group.supplements} lang={lang} />
           )}
