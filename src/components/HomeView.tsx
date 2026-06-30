@@ -33,12 +33,14 @@ export default function HomeView({ lang, categories, onSelectCategory, onSelectP
         {categories.map((cat) => (
           <button
             key={cat.slug}
-            onClick={() => onSelectCategory(cat.slug)}
+            onClick={() => { if (!cat.unavailable) onSelectCategory(cat.slug); }}
+            disabled={cat.unavailable}
             style={{
               position: "relative", borderRadius: 16,
               overflow: "hidden", aspectRatio: "1 / 1",
-              border: "none", cursor: "pointer",
+              border: "none", cursor: cat.unavailable ? "default" : "pointer",
               background: "#C8DCEF", padding: 0,
+              opacity: cat.unavailable ? 0.55 : 1,
             }}
           >
             <img
@@ -51,6 +53,21 @@ export default function HomeView({ lang, categories, onSelectCategory, onSelectP
               background: "linear-gradient(to top, rgba(8,43,79,0.78) 0%, rgba(8,43,79,0.35) 55%, transparent 100%)",
               pointerEvents: "none",
             }} />
+            {cat.unavailable && (
+              <div style={{
+                position: "absolute", top: 8, right: 8,
+                background: "rgba(8,43,79,0.85)", borderRadius: 6,
+                padding: "3px 8px",
+              }}>
+                <span style={{
+                  fontFamily: "'Jost', sans-serif", fontSize: "0.62rem",
+                  fontWeight: 600, color: "#FFFFFF",
+                  letterSpacing: "0.05em", textTransform: "uppercase",
+                }}>
+                  {lang === "it" ? "Non disponibile" : "Unavailable"}
+                </span>
+              </div>
+            )}
             <div style={{
               position: "absolute", bottom: 0, left: 0, right: 0,
               padding: "12px 10px", display: "flex",

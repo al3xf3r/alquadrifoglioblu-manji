@@ -61,6 +61,7 @@ export interface MenuCategory {
   nameIT: string;
   nameEN: string;
   image: string;
+  unavailable?: boolean;
   groups: MenuGroup[];
 }
 
