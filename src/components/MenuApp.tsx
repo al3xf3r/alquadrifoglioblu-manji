@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Lang, MENU_CATEGORIES, MenuCategory } from "@/data/menu";
+import { Lang, MenuCategory } from "@/data/menu";
 import IntroLoader from "./IntroLoader";
 import TopBar from "./TopBar";
 import HomeView from "./HomeView";
@@ -13,7 +13,11 @@ import Footer from "./Footer";
 const SESSION_KEY = "qb_intro_seen";
 type View = "home" | "category" | "pasticceria";
 
-export default function MenuApp() {
+interface MenuAppProps {
+  initialCategories: MenuCategory[];
+}
+
+export default function MenuApp({ initialCategories }: MenuAppProps) {
   const [lang, setLang] = useState<Lang>("it");
   const [view, setView] = useState<View>("home");
   const [activeCat, setActiveCat] = useState<MenuCategory | null>(null);
@@ -42,7 +46,7 @@ export default function MenuApp() {
   }, [view]);
 
   const openCategory = (slug: string) => {
-    const cat = MENU_CATEGORIES.find((c) => c.slug === slug) ?? null;
+    const cat = initialCategories.find((c) => c.slug === slug) ?? null;
     if (!cat) return;
     window.history.pushState({ slug }, "");
     setActiveCat(cat);
@@ -64,33 +68,33 @@ export default function MenuApp() {
 
   const topBarTitle =
     view === "pasticceria"
-      ? (lang === "it" ? "Pasticceria" : "Pastry")
+      ? lang === "it" ? "Pasticceria" : "Pastry"
       : view === "category" && activeCat
-      ? (lang === "it" ? activeCat.nameIT : activeCat.nameEN)
+      ? lang === "it" ? activeCat.nameIT : activeCat.nameEN
       : undefined;
+
+  if (showIntro === null) {
+    return <div style={{ position: "fixed", inset: 0, background: "#EEF7FF" }} />;
+  }
 
   return (
     <>
       {showIntro === true && <IntroLoader onDone={handleIntroComplete} />}
 
-      <div
-        style={{
-          opacity: showIntro === false ? 1 : 0,
-          transition: showIntro === false ? "opacity 0.4s ease" : "none",
-          pointerEvents: showIntro === false ? "auto" : "none",
-          minHeight: "100dvh",
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
+      <div style={{
+        opacity: showIntro === false ? 1 : 0,
+        transition: showIntro === false ? "opacity 0.4s ease" : "none",
+        pointerEvents: showIntro === false ? "auto" : "none",
+        minHeight: "100dvh",
+        display: "flex",
+        flexDirection: "column",
+      }}>
         {searchOpen && (
           <SearchOverlay
             lang={lang}
+            categories={initialCategories}
             onClose={() => setSearchOpen(false)}
-            onSelectCategory={(slug) => {
-              setSearchOpen(false);
-              openCategory(slug);
-            }}
+            onSelectCategory={(slug) => { setSearchOpen(false); openCategory(slug); }}
           />
         )}
 
@@ -106,16 +110,15 @@ export default function MenuApp() {
           {view === "home" && (
             <HomeView
               lang={lang}
+              categories={initialCategories}
               onSelectCategory={openCategory}
               onSelectPasticceria={openPasticceria}
             />
           )}
           {view === "category" && activeCat && (
-            <CategoryView slug={activeCat.slug} lang={lang} />
+            <CategoryView category={activeCat} lang={lang} />
           )}
-          {view === "pasticceria" && (
-            <PasticceraView lang={lang} />
-          )}
+          {view === "pasticceria" && <PasticceraView lang={lang} />}
         </main>
 
         <Footer lang={lang} />
